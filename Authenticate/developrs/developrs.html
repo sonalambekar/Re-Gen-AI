@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developers Section</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+    <style>
+        /* Reset styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #010c13;
+            background-image: -webkit-linear-gradient(left, rgb(7, 21, 31) 0%, rgb(16, 29, 38) 50%, rgb(1, 16, 26) 100%);
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin: 40px auto;
+            padding: 40px 20px;
+            width: 90%;
+            max-width: 1200px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s ease;
+        }
+
+        .section h2 {
+            font-size: 2.4em;
+            color: #f1f1f1;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 3px solid #333;
+            padding-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .photo-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .photo-card {
+            background: #2c2c2c;
+            padding: 20px;
+            border-radius: 12px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            width: 200px;
+            cursor: pointer;
+            border: 2px solid #333;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(241, 241, 241, 0.2);
+            border: 2px solid #f1f1f1;
+        }
+
+        .photo-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid rgb(241, 241, 241);
+            object-fit: cover;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .photo-card:hover img {
+            border-color: #f1f1f1;
+        }
+
+        .photo-card p {
+            color: #e0e0e0;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <section class="section fade-in" id="web-dev-team">
+        <h2>Developers</h2>
+        <div class="photo-row">
+            <a href="https://www.linkedin.com/in/sonal-ambekar-8475a0275" target="_blank" class="photo-card">
+                <img src="images/sonal.jpg" alt="Web Dev 1">
+                <p>Sonal Ambekar</p>
+            </a>
+            <a href="https://www.linkedin.com/in/chandrashekar-hl" target="_blank" class="photo-card">
+                <img src="images/me4.jpg" alt="Web Dev 2">
+                <p>Chandrashekar H L</p>
+            </a>
+            <a href="https://www.linkedin.com/in/manya-bm-010955284/" target="_blank" class="photo-card">
+                <img src="images/manya.jpg" alt="Web Dev 3">
+                <p>Manya B M</p>
+            </a>
+            <a href="https://www.linkedin.com/in/vinay-kumar-e-3a933a273/" target="_blank" class="photo-card">
+                <img src="images/vinay.jpg" alt="Web Dev 4">
+                <p>Vinaykumar Edigara</p>
+            </a>
+        </div>
+    </section>
+</body>
+</html>

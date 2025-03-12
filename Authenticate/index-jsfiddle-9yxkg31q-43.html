@@ -1,0 +1,280 @@
+<!doctype html>
+<html>
+  <html>
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>google maps</title>
+
+      <style>
+        html,
+        body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+
+        .place-picker-container {
+          padding: 20px;
+        }
+        #map {
+    height: 100vh;
+    width: 100%;
+}
+      </style>
+    </head>
+    <body>
+      <!doctype html>
+      <html>
+        <head>
+          <title>Maps and Places Autocomplete</title>
+          <script
+            type="module"
+            src="https://ajax.googleapis.com/ajax/libs/@googlemaps/extended-component-library/0.6.11/index.min.js"
+          ></script>
+          <link rel="stylesheet" href="style.css" />
+        </head>
+        <body>
+          <gmpx-api-loader
+            key="AIzaSyCYCanKQignOALVtlg4IbwZqaOfm3t2JG8"
+            solution-channel="GMP_GE_mapsandplacesautocomplete_v2"
+          >
+          </gmpx-api-loader>
+          <gmp-map center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
+            <div
+              slot="control-block-start-inline-start"
+              class="place-picker-container"
+            >
+              
+            </div>
+            <gmp-advanced-marker></gmp-advanced-marker>
+          </gmp-map>
+          <script>
+            async function init() {
+  await customElements.whenDefined("gmp-map");
+
+  const map = document.querySelector("gmp-map");
+  const placePicker = document.querySelector("gmpx-place-picker");
+  const infowindow = new google.maps.InfoWindow();
+
+  // Default Location: Bangalore
+  const defaultLocation = { lat: 12.9716, lng: 77.5946 };
+
+  // Set map options with satellite view by default
+  map.innerMap.setOptions({
+    center: defaultLocation, // Always center on Bangalore
+    zoom: 12, // Set a default zoom level
+    mapTypeId: google.maps.MapTypeId.SATELLITE, // Satellite view by default
+    mapTypeControl: true, // Enable map type control
+    streetViewControl: true, // Enable street view control
+    fullscreenControl: true, // Enable fullscreen control
+    rotateControl: true, // Enable rotation control (includes compass)
+    zoomControl: true, // Enable zoom control
+    scaleControl: true, // Enable scale control
+    gestureHandling: "auto", // Allow tilt and rotation gestures
+    tilt: 45, // Tilt the map to 45 degrees (forces 3D mode)
+  });
+
+  // Function to create a draggable marker with animations
+  function createDraggableMarker(position, title, dataset) {
+    const marker = new google.maps.Marker({
+      position,
+      map: map.innerMap,
+      title,
+      draggable: true,
+      animation: google.maps.Animation.BOUNCE, // Bounce effect when marker is placed
+    });
+
+    // Stop bouncing after 2 seconds
+    setTimeout(() => marker.setAnimation(null), 2000);
+
+    // Store dataset attributes inside marker
+    marker.dataset = dataset;
+
+    // Show dataset when marker is clicked with pulse effect
+    google.maps.event.addListener(marker, "click", function () {
+      marker.setAnimation(google.maps.Animation.BOUNCE); // Bounce effect on click
+      setTimeout(() => marker.setAnimation(null), 1400); // Stop after bounce
+      map.innerMap.setCenter(marker.getPosition());
+      map.innerMap.setZoom(15);
+      infowindow.setContent(
+        `<strong>${marker.title}</strong><br>
+                <b>Population:</b> ${marker.dataset.population} <br>
+                <b>Area:</b> ${marker.dataset.area} km²<br>
+                <a href="https://www.google.com/maps?q=${marker.getPosition().lat()},${marker.getPosition().lng()}" target="_blank">Open in Google Maps</a>`,
+      );
+      infowindow.open(map.innerMap, marker);
+    });
+
+    // Show new coordinates when marker is dragged
+    google.maps.event.addListener(marker, "dragend", function (event) {
+      // Close any existing infowindow
+      infowindow.close();
+
+      // Create a container for the mini-map
+      const miniMapContainer = document.createElement("div");
+      miniMapContainer.style.width = "200px";
+      miniMapContainer.style.height = "150px";
+
+      // Create a mini-map
+      const miniMap = new google.maps.Map(miniMapContainer, {
+        center: event.latLng,
+        zoom: 12,
+        mapTypeId: google.maps.MapTypeId.ROADMAP, // Use roadmap for mini-map
+        disableDefaultUI: true, // Disable controls for mini-map
+      });
+
+      // Add a marker to the mini-map
+      new google.maps.Marker({
+        position: event.latLng,
+        map: miniMap,
+      });
+
+      // Set the content of the infowindow to the mini-map
+      infowindow.setContent(miniMapContainer);
+      infowindow.open(map.innerMap, marker);
+    });
+
+    return marker;
+  }
+
+  // Add multiple draggable markers with dataset and animation
+  const markers = [
+    createDraggableMarker({ lat: 12.9716, lng: 77.5946 }, "Bangalore", {
+      population: "8.4M",
+      area: "741",
+    }),
+    createDraggableMarker({ lat: 12.9352, lng: 77.6245 }, "MG Road", {
+      population: "N/A",
+      area: "5",
+    }),
+    createDraggableMarker({ lat: 13.0358, lng: 77.597 }, "Hebbal", {
+      population: "300K",
+      area: "20",
+    }),
+    createDraggableMarker({ lat: 12.926, lng: 77.6762 }, "Electronic City", {
+      population: "150K",
+      area: "23",
+    }),
+    createDraggableMarker({ lat: 12.9784, lng: 77.6408 }, "Indiranagar", {
+      population: "400K",
+      area: "8",
+    }),
+    createDraggableMarker({ lat: 12.91, lng: 77.61 }, "JP Nagar", {
+      population: "500K",
+      area: "10",
+    }),
+    createDraggableMarker({ lat: 12.9172, lng: 77.6228 }, "Jayanagar", {
+      population: "700K",
+      area: "12",
+    }),
+    createDraggableMarker({ lat: 12.9941, lng: 77.5715 }, "Malleshwaram", {
+      population: "200K",
+      area: "6",
+    }),
+    createDraggableMarker({ lat: 13.0182, lng: 77.6481 }, "Marathahalli", {
+      population: "250K",
+      area: "7",
+    }),
+    createDraggableMarker({ lat: 12.8449, lng: 77.6634 }, "Sarjapur", {
+      population: "300K",
+      area: "30",
+    }),
+    createDraggableMarker({ lat: 12.995, lng: 77.6995 }, "Whitefield", {
+      population: "500K",
+      area: "15",
+    }),
+    createDraggableMarker({ lat: 12.9304, lng: 77.5832 }, "Koramangala", {
+      population: "600K",
+      area: "11",
+    }),
+  ];
+
+  // Heatmap for population density
+  const heatmapData = markers.map((marker) => ({
+    location: marker.getPosition(),
+    weight: parseFloat(marker.dataset.population.replace("M", "")) || 0,
+  }));
+  const heatmap = new google.maps.visualization.HeatmapLayer({
+    data: heatmapData,
+    map: map.innerMap,
+  });
+
+  // Customize the heatmap
+  heatmap.setOptions({
+    radius: 20, // Adjust the radius of the heatmap points
+    opacity: 0.6, // Adjust the opacity of the heatmap
+    gradient: [
+      // Define a custom color gradient
+      "rgba(0, 255, 255, 0)",
+      "rgba(0, 255, 255, 1)",
+      "rgba(0, 191, 255, 1)",
+      "rgba(0, 127, 255, 1)",
+      "rgba(0, 63, 255, 1)",
+      "rgba(0, 0, 255, 1)",
+      "rgba(0, 0, 223, 1)",
+      "rgba(0, 0, 191, 1)",
+      "rgba(0, 0, 159, 1)",
+      "rgba(0, 0, 127, 1)",
+      "rgba(63, 0, 91, 1)",
+      "rgba(127, 0, 63, 1)",
+      "rgba(191, 0, 31, 1)",
+      "rgba(255, 0, 0, 1)",
+    ],
+  });
+
+  // Enable the heatmap
+  heatmap.setMap(map.innerMap);
+
+  // Toggle between street view and satellite view
+  const toggleMapType = () => {
+    const currentMapType = map.innerMap.getMapTypeId();
+    const newMapType =
+      currentMapType === google.maps.MapTypeId.SATELLITE
+        ? google.maps.MapTypeId.ROADMAP
+        : google.maps.MapTypeId.SATELLITE;
+    map.innerMap.setMapTypeId(newMapType);
+  };
+
+  // Add a button to toggle map type
+  const toggleButton = document.createElement("button");
+  toggleButton.textContent = "Toggle Map View";
+  toggleButton.style.position = "absolute";
+  toggleButton.style.top = "10px";
+  toggleButton.style.left = "10px";
+  toggleButton.style.zIndex = "1000";
+  toggleButton.addEventListener("click", toggleMapType);
+  document.body.appendChild(toggleButton);
+
+  // Add a button to tilt the map and show the compass
+  const tiltButton = document.createElement("button");
+  tiltButton.textContent = "Tilt Map";
+  tiltButton.style.position = "absolute";
+  tiltButton.style.top = "50px";
+  tiltButton.style.left = "10px";
+  tiltButton.style.zIndex = "1000";
+  tiltButton.addEventListener("click", () => {
+    map.innerMap.setTilt(45); // Tilt the map to 45 degrees
+  });
+  document.body.appendChild(tiltButton);
+
+  // Handle place selection from search box
+  placePicker.addEventListener("gmpx-placechange", () => {
+    const place = placePicker.value;
+    if (!place.location) {
+      window.alert("No details available for input: '" + place.name + "'");
+      infowindow.close();
+      return;
+    }
+    map.innerMap.setCenter(place.location);
+    map.innerMap.setZoom(15);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", init);
+          </script>
+        </body>
+      </html>
+    </body>
+  </html>
+</html>

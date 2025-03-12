@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background:#010c13;	
+	        background-image: -webkit-linear-gradient(left , rgb(7, 21, 31) 0%, rgb(16, 29, 38) 50%, rgb(1, 16, 26) 100%);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 20px;
+            width: 400px;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+        .card img {
+            width: 100%;
+            height: 50%;
+        }
+        .card-body {
+            padding: 15px;
+        }
+        .card-title {
+            font-size: 18px;
+            margin: 10px 0;
+            color: white;
+        }
+        .card-text {
+            font-size: 14px;
+            color: white;
+            margin-bottom: 15px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: black;
+            background-color: white;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: white;
+        }
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            color: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        .fab:hover {
+            background-color: #0056b3;
+        }
+        .timer {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 14px;
+            color: #000;
+        }
+        .timer.red {
+            color: red;
+        }
+        /* Popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 1000px;
+            height: 80%;
+            background:#010c13;	
+	        background-image: -webkit-linear-gradient(left , rgb(7, 21, 31) 0%, rgb(16, 29, 38) 50%, rgb(1, 16, 26) 100%);
+            z-index: 1000;
+            overflow-y: auto;
+            overflow-x: hidden;
+            animation: fadeIn 0.3s ease-in-out;
+            color: white;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        .popup img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+        .popup .popup-body {
+            padding: 20px;
+        }
+        .popup .popup-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .popup .popup-text {
+            font-size: 16px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .popup .popup-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .popup .detail-box {
+            flex: 1 1 calc(50% - 10px);
+            background-color: black;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .popup .detail-box:hover {
+            transform: translateY(-5px);
+        }
+        .popup .popup-button, .popup .start-bid-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .popup .popup-button:hover, .popup .start-bid-button:hover {
+            background-color: #0056b3;
+        }
+        .popup .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .bid-container {
+            width: 100%;
+            height: auto;
+            display: flex;
+            background:#010c13;	
+	        background-image: -webkit-linear-gradient(left , rgb(7, 21, 31) 0%, rgb(16, 29, 38) 50%, rgb(1, 16, 26) 100%);
+            gap: 30px;
+            align-items: center;
+           padding: 10px;
+            
+            
+        }
+        .btn{
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color:black;
+            background-color: white;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .bid-track-container{
+            width: 33%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .user-amt-container{
+            width: 100%;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+            margin: 15px;
+        }
+        .price-container{
+            width: 33%;
+            height: 20px;
+            padding: 10px;
+            margin: 15px;
+            
+        }
+        .bid-btn-option-container{
+            width: 33%;
+            height: 20px;
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            margin: 15px;
+         
+        }
+        #btn {
+            height: 30px;
+            width: 60px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Cards will be dynamically inserted here by JavaScript -->
+    </div>
+    <a href="land_register.html" class="fab">+</a>
+
+    <!-- Popup and overlay -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <span class="close-button" id="close-button">&times;</span>
+        <img id="popup-image" src="" alt="Land Image">
+        <div class="popup-body">
+            <h2 class="popup-title" id="popup-title"></h2>
+            <p class="popup-text" id="popup-text"></p>
+            <div class="popup-details">
+                <div class="detail-box">
+                    <p><strong>Plot Area:</strong> <span id="popup-plot-area"></span></p>
+                </div>
+                <div class="detail-box">
+                    <p><strong>Any Construction Done:</strong> <span id="popup-construction"></span></p>
+                </div>
+                <div class="detail-box">
+                    <p><strong>Status:</strong> <span id="popup-status"></span></p>
+                </div>
+                <div class="detail-box">
+                    <p><strong>Boundary Wall:</strong> <span id="popup-boundary"></span></p>
+                </div>
+                <div class="detail-box">
+                    <p><strong>Transaction Type:</strong> <span id="popup-transaction"></span></p>
+                </div>
+            </div>
+            <button class="popup-button" id="view-more-button">View More Images</button>
+           
+        </div>
+        <div class="bid-container" id="bid-container">
+            <!-- Bid information will be dynamically inserted here by JavaScript -->
+             <div class="bid-track-container">
+                <div class="user-amt-container">
+                    <p id="username">Ajaysingh</p>
+                    <p id="price" style="color: green;">+5000 INR</p>
+                </div>
+             </div>
+             <div class="price-container">
+                current price: 10000 INR
+             </div>
+             <div class="bid-btn-option-container">
+                <button id="btn">Bid</button>
+                <div class="amt-options">
+                <label for="">Select bid amount:</label>
+                <select name="" id="bid-amount">
+                    <option value="10000">10000</option>
+                    <option value="15000">15000</option>
+                    <option value="20000">20000</option>
+                    <option value="30000">30000</option>
+                </select>
+            </div>
+             </div>
+
+        </div>
+    </div>
+
+    <script src="land.js" type="module"></script>
+</body>
+</html>
